@@ -256,6 +256,7 @@ delay(1000);
 ![image](https://github.com/Kirill-Kasparov/Plants_monitor/assets/131332065/cb737d20-18f3-42e4-ab6f-090ea02aceee)
 
 Готовый результат монтажа:
+
 ![image](https://github.com/Kirill-Kasparov/Plants_monitor/assets/131332065/87442b84-60e9-4a6c-a3bf-3b2b38f166d0)
 
 ![image](https://github.com/Kirill-Kasparov/Plants_monitor/assets/131332065/bd3597c7-459a-42c6-8224-d1faaffb7090)
