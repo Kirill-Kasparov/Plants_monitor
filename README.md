@@ -76,7 +76,7 @@ LiquidCrystal_I2C lcd(0x27,16,2);  // Устанавливаем дисплей
 
 //датчики влажности почвы
 int AirValue = 600;             // Максимальное значение сухого датчика
-int WaterValue = 200;           // Минимальное значение погруженного датчика
+int WaterValue = 300;           // Минимальное значение погруженного датчика
 
 int soilMoistureValue = 0;            // Создаем переменную soilMoistureValue
 int soilMoisturePercent = 0;    
@@ -105,7 +105,7 @@ void loop()
 {
 // Снимаем порог влажности с потенциометра
 int airPotValue = analogRead(AirValuePin);  // Считываем значение с потенциометра для AirValue
-AirValue = map(airPotValue, 0, 1023, 300, 1000); // Маппинг значения на диапазон от 300 до 600
+AirValue = map(airPotValue, 0, 1023, WaterValue, 1000); // Маппинг значения на диапазон от 300 до 600
 
 // Снимаем температуру и влажность воздуха
 int f = dht.readHumidity();
@@ -127,16 +127,12 @@ soilMoistureValue = analogRead(A0);   // Считываем данные с по
 soilMoistureValue2 = analogRead(A1);   // Считываем данные с порта A0 и записываем их в переменную
 soilMoistureValue3 = analogRead(A2);   // Считываем данные с порта A0 и записываем их в переменную
 
-if (soilMoistureValue > AirValue || soilMoistureValue2 > AirValue || soilMoistureValue3 > AirValue) {
-    // Находим ближайшее значение и присваиваем его переменной AirValue
-    int closestValue = soilMoistureValue;
-    if (abs(soilMoistureValue2 - AirValue) < abs(closestValue - AirValue)) {
-      closestValue = soilMoistureValue2;
-    }
-    if (abs(soilMoistureValue3 - AirValue) < abs(closestValue - AirValue)) {
-      closestValue = soilMoistureValue3;
-    }
-    AirValue = closestValue;}
+if (soilMoistureValue > AirValue || soilMoistureValue2 > AirValue || soilMoistureValue3 > AirValue) {    // устраняем погрешность вычислений
+    AirValue = max(max(soilMoistureValue, soilMoistureValue2), soilMoistureValue3);}
+
+if (soilMoistureValue < WaterValue || soilMoistureValue2 < WaterValue || soilMoistureValue3 < WaterValue) {
+  WaterValue = min(min(soilMoistureValue, soilMoistureValue2), soilMoistureValue3);}
+
 
 soilMoisturePercent = map(soilMoistureValue, AirValue, WaterValue, 0, 9);
 soilMoisturePercent2 = map(soilMoistureValue2, AirValue, WaterValue, 0, 9);
